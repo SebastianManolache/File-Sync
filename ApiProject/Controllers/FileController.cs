@@ -41,18 +41,14 @@ namespace ApiProject.Controllers
 
             BlobContinuationToken blobContinuationToken = null;
             BlobResultSegment results = null;
-            // ListBlockItem result1 = new ListBlockItem();
-            ListBlockItem result1 = null;
-            BlobListingDetails result2 = new BlobListingDetails();
-            
+         
             var files = new List<File>();
             do
             {
                 results = await cloudBlobContainer.ListBlobsSegmentedAsync(null, blobContinuationToken);
                 
                 // Get the value of the continuation token returned by the listing call.
-                blobContinuationToken = results.ContinuationToken;
-                
+            
                 foreach (var item in results.Results)
                 {
 
@@ -97,12 +93,12 @@ namespace ApiProject.Controllers
             string sourceFile = null;
             string destinationFile = null;
 
-            string localPath = "C:\\Users\\Admin\\Documents\\Files";
-            string localFileName = "test1.txt";
+            string localPath = "D:\\Azure";
+            string localFileName = "test1";
             sourceFile = Path.Combine(localPath, localFileName);
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
 
-            destinationFile = sourceFile.Replace(".txt", "_DOWNLOADED.txt");
+            destinationFile = sourceFile;
             await cloudBlockBlob.DownloadToFileAsync(destinationFile, FileMode.Create);
             return Ok();
         }
@@ -128,6 +124,35 @@ namespace ApiProject.Controllers
 
                 await cloudBlockBlob.UploadFromFileAsync(sourceFile);
 
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpGet("delete")]
+        public async Task<IActionResult> DeleteFile([FromBody] string localFileName)
+        {
+            try
+            {
+                var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
+                //string storageConnection = CloudConfigurationManager.GetSetting(BlobStorageConnectionString);
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
+                CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
+
+                //string localFileName = "text1.txt";
+               
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
+                if (cloudBlockBlob is null)
+                {
+                    return NotFound();
+                }
+                await cloudBlockBlob.DeleteIfExistsAsync();
+
+                
                 return Ok();
             }
             catch (Exception e)

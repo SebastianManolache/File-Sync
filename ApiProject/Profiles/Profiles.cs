@@ -9,7 +9,7 @@ namespace ApiProject.Profiles
         public Profiles()
         {
             CreateMap<File, FileGet>();
+            CreateMap<File, FilePost>();
         }
-
     }
 }

@@ -6,7 +6,10 @@ namespace ApiProject.Interfaces
 {
     public interface IFileService
     {
-        Task<List<File>> GetAsync();
-        Task<File> CreateAsync(File file);
+        List<File> GetFiles();
+        Task<File> UploadFileAsync(string fileName);
+        Task<bool> DeleteAsync(string fileName);
+        File GetByName(string fileName);
+        Task<bool> DownloadFileAsync(string fileName);
     }
 }

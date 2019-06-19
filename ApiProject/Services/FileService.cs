@@ -19,11 +19,12 @@ namespace ApiProject.Services
 
         public async Task<bool> DeleteAsync(string localFileName)
         {
-            //var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            //CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            //CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
-           
+            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            //var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
+
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
 
             if (cloudBlockBlob is null)
@@ -50,11 +51,11 @@ namespace ApiProject.Services
 
         public async Task<bool> DownloadFileAsync(string localFileName)
         {
-            //var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            //CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            //CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            //CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
-            var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
+            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
+            // var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
             BlobContainerPermissions permissions = new BlobContainerPermissions
             {
                 PublicAccess = BlobContainerPublicAccessType.Blob
@@ -76,11 +77,11 @@ namespace ApiProject.Services
 
         public File GetByName(string fileName)
         {
-            //var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            //CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            //CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            //CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
-            var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
+            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
+            //var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
 
             var list = cloudBlobContainer.ListBlobs(useFlatBlobListing: true);
             var blobs = cloudBlobContainer.ListBlobs().OfType<CloudBlockBlob>().ToList();
@@ -132,11 +133,11 @@ namespace ApiProject.Services
 
         public async Task<File> UploadFileAsync(string localFileName)
         {
-            //var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            //CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            //CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            //CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
-            var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
+            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
+            //  var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
 
             string sourceFile = null;
             string localPath = "C:\\Users\\Admin\\Documents\\Files";

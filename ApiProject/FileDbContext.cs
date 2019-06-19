@@ -1,5 +1,6 @@
 ﻿using ApiProject.Models;
 using Microsoft.EntityFrameworkCore;
+using File = ApiProject.Models.File;
 
 namespace ApiProject
 {

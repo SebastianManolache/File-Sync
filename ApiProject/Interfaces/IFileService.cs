@@ -1,6 +1,7 @@
 ﻿using ApiProject.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using File = ApiProject.Models.File;
 
 namespace ApiProject.Interfaces
 {

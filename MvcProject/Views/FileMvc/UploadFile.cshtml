@@ -1,4 +1,5 @@
-﻿
+﻿@using Data.Models
+@model FileUploadModel
 @{
     Layout = null;
 }
@@ -8,13 +9,12 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>MyView</title>
+    <title>UploadFile</title>
 </head>
 <body>
     <div>
-        FileSync Project-Index Page
-        <input type="submit" name="BtnSubmit" value="Get List" onclick="return IsValid();" />
-
+        @Model.Name
+       
     </div>
 </body>
 </html>

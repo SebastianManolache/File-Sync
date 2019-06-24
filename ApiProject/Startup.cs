@@ -32,7 +32,7 @@ namespace ApiProject
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<IFileService,FileService>();
-            services.AddSingleton<IAzureManager,AzureManager>();
+            //services.AddSingleton<IAzureManager,AzureManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

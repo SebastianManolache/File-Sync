@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiProject", "ApiProject\Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcProject", "MvcProject\MvcProject.csproj", "{6ABA508D-A192-477C-BBF3-1E72C74BA64E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "ClassLibrary1\Data.csproj", "{5AD617B9-2DEE-4DED-8199-236C217F1ABD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,26 @@ Global
 		{6ABA508D-A192-477C-BBF3-1E72C74BA64E}.Release|x64.Build.0 = Release|Any CPU
 		{6ABA508D-A192-477C-BBF3-1E72C74BA64E}.Release|x86.ActiveCfg = Release|Any CPU
 		{6ABA508D-A192-477C-BBF3-1E72C74BA64E}.Release|x86.Build.0 = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|ARM.Build.0 = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|x64.Build.0 = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Debug|x86.Build.0 = Debug|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|ARM.Build.0 = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|ARM64.Build.0 = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|x64.ActiveCfg = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|x64.Build.0 = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|x86.ActiveCfg = Release|Any CPU
+		{5AD617B9-2DEE-4DED-8199-236C217F1ABD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

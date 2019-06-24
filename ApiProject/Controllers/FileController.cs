@@ -1,5 +1,5 @@
 ﻿using ApiProject.Interfaces;
-using ApiProject.Models.Dtos.File;
+using Data.Models.Dtos.File;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -33,7 +33,7 @@ namespace ApiProject.Controllers
                 }
 
                 var currentfiles = mapper.Map<List<FileGet>>(result);
-
+               
                 return Ok(currentfiles);
             }
             catch (Exception e)

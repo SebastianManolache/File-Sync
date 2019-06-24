@@ -1,0 +1,23 @@
+﻿@using Data.Models
+@model FileUploadModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UploadFile</title>
+</head>
+<body>
+    <div>
+        <form action="/FileMvc/UploadFile" method="post" enctype="multipart/form-data">
+            <a href="/FileMvc/Index">Back</a>
+            Select File:<input type="file" name="fileUpload" value="" />
+            <input type="submit" name="name" value="Upload" />
+        </form>
+    </div>
+</body>
+</html>

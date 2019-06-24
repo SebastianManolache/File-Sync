@@ -1,0 +1,22 @@
+﻿@model string
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DownloadFile</title>
+</head>
+<body>
+    <div>
+        <form action="/FileMvc/DownloadFile" method="post">
+            <a href="/FileMvc/Index">Back</a>
+            <input typeof="text" name="file" >
+            <input type="submit" name="name" value="Download" />
+        </form>
+    </div>
+</body>
+</html>

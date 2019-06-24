@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using File = Data.Models.File;
 
-namespace ApiProject.Interfaces
+namespace Data.Interfaces
 {
     public interface IFileService
     {

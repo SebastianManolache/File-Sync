@@ -1,5 +1,5 @@
-﻿using ApiProject.Models;
-using ApiProject.Models.Dtos.File;
+﻿using Data.Models;
+using Data.Models.Dtos.File;
 using AutoMapper;
 
 namespace ApiProject.Profiles

@@ -1,0 +1,47 @@
+﻿@using Data.Models
+@model FileListModel 
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>MyView</title>
+</head>
+<body>
+    <div>
+        <form action="/FileMvc/ActionFile" method="post">
+            <table border="1">
+                <tr>
+                    <th></th>
+                    <th> Name</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>CreatAt</th>
+                </tr>
+                @foreach (var item in Model.Files)
+                {
+                    <tr>
+                        <td> <input type="checkbox" name="Selected" value="IsSelectede" /> </td>
+                        <td>@item.Name</td>
+                        <td>@item.Size</td>
+                        <td>@item.Type</td>
+                        <td>@item.CreatedAt</td>
+                    </tr>
+                }
+
+            </table>
+            <input type="submit" name="BtnSubmit" value="Upload File" onclick="return IsValid();" />
+            <input type="submit" name="BtnSubmit" value="Delete File" onclick="return IsValid();" />
+            <input type="submit" name="BtnSubmit" value="Download" onclick="return IsValid();" />
+            <input type="submit" name="BtnSubmit" value="Reset" onclick="return IsValid();" />
+            <br /><br />
+            <input type="submit" name="BtnSubmit" value="Sync" onclick="return IsValid();" />
+        </form>
+    </div>
+</body>
+</html>

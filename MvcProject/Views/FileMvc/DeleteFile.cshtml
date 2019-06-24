@@ -1,0 +1,22 @@
+﻿@model string
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DeleteFile</title>
+</head>
+<body>
+    <div>
+        <form action="/FileMvc/DeleteFile" method="post">
+            <a href="/FileMvc/Index">Back</a>
+            <input typeof="text" name="file">
+            <input type="submit" name="name" value="Delete" />
+        </form>
+    </div>
+</body>
+</html>

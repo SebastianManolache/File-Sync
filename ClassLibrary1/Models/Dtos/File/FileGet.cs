@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ApiProject.Models.Dtos.File
+namespace Data.Models.Dtos.File
 {
     public class FileGet
     {

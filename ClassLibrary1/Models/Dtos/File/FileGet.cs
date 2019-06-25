@@ -8,5 +8,6 @@ namespace Data.Models.Dtos.File
         public int Size { get; set; }
         public string Type { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool isSelected { get; set; }
     }
 }

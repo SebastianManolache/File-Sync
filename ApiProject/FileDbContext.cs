@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using File = Data.Models.File;
 
-namespace ApiProject
+namespace ApiProject.Context
 {
     public class FileDbContext:DbContext
     {

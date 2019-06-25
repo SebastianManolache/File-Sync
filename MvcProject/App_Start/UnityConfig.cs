@@ -1,4 +1,4 @@
-using ClassLibrary1.Managers;
+using Data.Managers;
 using Data.Interfaces;
 using System;
 using System.Web.Mvc;

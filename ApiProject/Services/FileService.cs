@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using File = Data.Models.File;
+using ApiProject.Context;
 
 namespace ApiProject.Services
 {
@@ -141,15 +142,21 @@ namespace ApiProject.Services
 
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
 
-            await cloudBlockBlob.UploadFromFileAsync(sourceFile);
             var currentFile = GetByName(localFileName);
-           
-            using (var db = new FileDbContext())
+            if (currentFile is null)
             {
-                await db.File.AddAsync(currentFile);
-                await db.SaveChangesAsync();
-                return currentFile;
+                await cloudBlockBlob.UploadFromFileAsync(sourceFile);
+                currentFile = GetByName(localFileName);
+
+                using (var db = new FileDbContext())
+                {
+                    await db.File.AddAsync(currentFile);
+                    await db.SaveChangesAsync();
+                    return currentFile;
+                }
             }
+            return null;
+
         }
     }
 }

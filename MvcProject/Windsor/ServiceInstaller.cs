@@ -2,7 +2,7 @@
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Data.Interfaces;
-using ClassLibrary1.Managers;
+using Data.Managers;
 
 namespace MvcProject.Windsor
 {

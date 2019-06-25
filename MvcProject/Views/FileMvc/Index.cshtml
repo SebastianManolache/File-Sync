@@ -1,5 +1,5 @@
 ﻿@using Data.Models
-@model FileListModel 
+@model FileListModel
 
 @{
     Layout = null;
@@ -26,7 +26,7 @@
                 @foreach (var item in Model.Files)
                 {
                     <tr>
-                        <td> <input type="checkbox" name="Selected" value="IsSelectede" /> </td>
+                        <td> <input type="checkbox" name="@item.isSelected" value="@item.isSelected" /> </td>
                         <td>@item.Name</td>
                         <td>@item.Size</td>
                         <td>@item.Type</td>
@@ -35,10 +35,14 @@
                 }
 
             </table>
+
+
             <input type="submit" name="BtnSubmit" value="Upload File" onclick="return IsValid();" />
             <input type="submit" name="BtnSubmit" value="Delete File" onclick="return IsValid();" />
             <input type="submit" name="BtnSubmit" value="Download" onclick="return IsValid();" />
             <input type="submit" name="BtnSubmit" value="Reset" onclick="return IsValid();" />
+            <input type="submit" name="BtnSubmit" value="Selected File" onclick="return IsValid();" />
+            <input type="submit" name="BtnSubmit" value="Sort Files" onclick="return IsValid();" />
             <br /><br />
             <input type="submit" name="BtnSubmit" value="Sync" onclick="return IsValid();" />
         </form>

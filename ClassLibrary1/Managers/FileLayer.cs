@@ -11,8 +11,9 @@ using System.IO;
 using File = Data.Models.File;
 using ApiProject;
 using Microsoft.Data.Entity;
+using ApiProject.Context;
 
-namespace ClassLibrary1.Managers
+namespace Data.Managers
 {
     public class FileLayer : IFileLayer
     {
@@ -61,17 +62,25 @@ namespace ClassLibrary1.Managers
             // string localPath = "C:\\Users\\Admin\\Documents\\Files";
             //sourceFile = Path.Combine(localPath, fileName);
 
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
+            string sourceFile = fileName;
+            string localFileName = Path.GetFileName(fileName);
+            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
 
-            await cloudBlockBlob.UploadFromFileAsync(fileName);
-            var currentFile = GetByName(fileName);
-
-            using (var db = new FileDbContext())
+            var currentFile = GetByName(localFileName);
+            if (currentFile is null)
             {
-                await db.File.AddAsync(currentFile);
-                await db.SaveChangesAsync();
-                return currentFile;
+                await cloudBlockBlob.UploadFromFileAsync(sourceFile);
+
+                var currentFile1 = GetByName(localFileName);
+
+                using (var db = new FileDbContext())
+                {
+                    await db.File.AddAsync(currentFile1);
+                    await db.SaveChangesAsync();
+                    return currentFile1;
+                }
             }
+            return currentFile;
         }
         public File GetByName(string fileName)
         {

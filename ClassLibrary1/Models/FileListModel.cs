@@ -10,5 +10,6 @@ namespace Data.Models
     public class FileListModel
     {
         public List<FileGet> Files { get; set; }
+        public bool IsSelectedAll { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@using Data.Models
-@model FileUploadModel
+@model FileListModel
 @{
     Layout = null;
 }
@@ -13,8 +13,18 @@
 </head>
 <body>
     <div>
-        @Model.Name
-       
+        @foreach (var item in Model.Files)
+        {
+
+
+            @item.Name
+            @item.Size
+            @item.Type
+            @item.CreatedAt
+            @item.isSelected
+
+        }
+
     </div>
 </body>
 </html>

@@ -303,6 +303,7 @@
     <Content Include="Views\FileMvc\UploadFile.cshtml" />
     <Content Include="Views\FileMvc\DownloadFile.cshtml" />
     <Content Include="Views\FileMvc\DeleteFile.cshtml" />
+    <Content Include="Views\FileMvc\Sort.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

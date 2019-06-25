@@ -1,0 +1,22 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Sort</title>
+</head>
+<body>
+    <div>
+        <form action="/FileMvc/SortFile" method="post">
+            Sort file by
+            <input type="submit" name="BtnSubmit" value="Name" onclick="return IsValid();" />
+            <input type="submit" name="BtnSubmit" value="Size" onclick="return IsValid();" />
+        </form>
+    </div>
+</body>
+</html>

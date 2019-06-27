@@ -9,158 +9,125 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using File = Data.Models.File;
-using ApiProject;
 using Microsoft.Data.Entity;
-using ApiProject.Context;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace Data.Managers
 {
     public class FileLayer : IFileLayer
     {
 
-        public List<FileGet> GetFiles()
+        public async Task<List<FileGet>> GetFiles()
         {
-            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
+            string Baseurl = "https://localhost:44305";
+            var fileList = new List<FileGet>();
 
-            var list = cloudBlobContainer.ListBlobs(useFlatBlobListing: true);
-            var blobs = cloudBlobContainer.ListBlobs().OfType<CloudBlockBlob>().ToList();
-            var files = new List<FileGet>();
-
-            foreach (var blob in blobs)
+            using (var client = new HttpClient())
             {
-                var file = new FileGet
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage res = await client.GetAsync("/api/file");
+                if (res.IsSuccessStatusCode)
                 {
-                    Name = blob.Name,
-                    Size = (int)blob.Properties.Length,
-                    CreatedAt = DateTime.Parse(blob.Properties.Created.ToString()),
-                    Type = blob.Properties.ContentType
-                };
-                files.Add(file);
+                    var empresponse = res.Content.ReadAsStringAsync().Result;
+                    fileList = JsonConvert.DeserializeObject<List<FileGet>>(empresponse);
+                }
+
+                return fileList;
             }
-            return files;
-            //using (var db = new FileDbContext())
-            //{
-            //    var files = db
-            //        .File
-            //        .ToListAsync().Result;
-            //    return files;
-            //}
-            //return null;
         }
 
         public async Task<File> UploadFileAsync(string fileName)
         {
-            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
+            string Baseurl = "https://localhost:44305";
+            var file = new File();
 
-            // string sourceFile = null;
-            // string localPath = "C:\\Users\\Admin\\Documents\\Files";
-            //sourceFile = Path.Combine(localPath, fileName);
-
-            string sourceFile = fileName;
-            string localFileName = Path.GetFileName(fileName);
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
-
-            var currentFile = GetByName(localFileName);
-            if (currentFile is null)
+            using (var client = new HttpClient())
             {
-                await cloudBlockBlob.UploadFromFileAsync(sourceFile);
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var currentFile1 = GetByName(localFileName);
-
-                using (var db = new FileDbContext())
+                HttpResponseMessage res = await client.GetAsync($"/api/file/upload/{fileName}");
+                if (res.IsSuccessStatusCode)
                 {
-                    await db.File.AddAsync(currentFile1);
-                    await db.SaveChangesAsync();
-                    return currentFile1;
+                    var empresponse = res.Content.ReadAsStringAsync().Result;
+                    file = JsonConvert.DeserializeObject<File>(empresponse);
                 }
-            }
-            return currentFile;
-        }
-        public File GetByName(string fileName)
-        {
-            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
 
-            var list = cloudBlobContainer.ListBlobs(useFlatBlobListing: true);
-            var blobs = cloudBlobContainer.ListBlobs().OfType<CloudBlockBlob>().ToList();
-            var files = new List<File>();
-
-            foreach (var blob in blobs)
-            {
-                if (blob.Name == fileName)
-                {
-                    return new File
-                    {
-                        Name = blob.Name,
-                        Size = blob.Properties.Length,
-                        CreatedAt = DateTime.Parse(blob.Properties.Created.ToString()),
-                        Type = blob.Properties.ContentType,
-                        UpdatedAt = DateTime.Parse(blob.Properties.LastModified.ToString())
-                    };
-                }
+                return file;
             }
-            return null;
         }
 
-        public async Task<bool> DownloadFileAsync(string localFileName)
+        public async Task<File> GetByName(string fileName)
         {
-            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
-            BlobContainerPermissions permissions = new BlobContainerPermissions
+            string Baseurl = "https://localhost:44305";
+            var file = new File();
+
+            using (var client = new HttpClient())
             {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            };
-            await cloudBlobContainer.SetPermissionsAsync(permissions);
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            string sourceFile = null;
-            string destinationFile = null;
-            string localPath = "D:\\Azure";
+                HttpResponseMessage res = await client.GetAsync($"/api/file/byname/{fileName}");
 
-            sourceFile = Path.Combine(localPath, localFileName);
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
-            destinationFile = sourceFile;
+                if (res.IsSuccessStatusCode)
+                {
+                    var empresponse = res.Content.ReadAsStringAsync().Result;
+                    file = JsonConvert.DeserializeObject<File>(empresponse);
+                }
 
-            await cloudBlockBlob.DownloadToFileAsync(destinationFile, FileMode.Create);
-
-            return true;
+                return file;
+            }
         }
 
         public async Task<bool> DeleteAsync(string localFileName)
         {
-            var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            string Baseurl = "https://localhost:44305";
+            var file = new File();
 
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
-
-            if (cloudBlockBlob is null)
+            using (var client = new HttpClient())
             {
-                return false;
-            }
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            await cloudBlockBlob.DeleteIfExistsAsync();
+                HttpResponseMessage res = await client.DeleteAsync($"/api/file/delete/{localFileName}");
 
-            using (var db = new FileDbContext())
-            {
-                var currentFile = await db.File.FirstOrDefaultAsync(file => file.Name == localFileName);
-                if (currentFile is null)
+                if (res.IsSuccessStatusCode)
                 {
-                    return false;
+                    return true;
                 }
 
-                db.File.Remove(currentFile);
-                await db.SaveChangesAsync();
+                return false;
+            }
+        }
+
+        public async Task<bool> DownloadFileAsync(string localFileName)
+        {
+            string Baseurl = "https://localhost:44305";
+            var file = new File();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage res = await client.GetAsync($"/api/file/download/{localFileName}");
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var empresponse = res.Content.ReadAsStringAsync().Result;
+                    file = JsonConvert.DeserializeObject<File>(empresponse);
+
+                    return true;
+                }
 
                 return true;
             }

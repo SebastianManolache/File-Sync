@@ -1,19 +1,18 @@
 ﻿using Data.Interfaces;
 using Data.Models;
 using Data.Models.Dtos.File;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Http;
 
 namespace MvcProject.Controllers
 {
     public class FileMvcController : Controller
     {
-        public FileMvcController()
-        {
-        }
         private readonly IFileLayer fileLayer;
         private List<FileGet> listFileSelected;
 
@@ -23,143 +22,201 @@ namespace MvcProject.Controllers
         }
 
         // GET: File
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var list = new FileListModel();
-            var files = new List<FileGet>();
+            try
+            {
+                var files = await fileLayer.GetFiles();
 
-            files = fileLayer.GetFiles();
-            list.Files = files;
-
-            return View("Index", list);
+                return View("IndexNew", files);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public ActionResult ActionFile(string BtnSubmit)
         {
-            switch (BtnSubmit)
+            try
             {
-                case "Upload File":
-                    return View("Upload");
-                case "Download":
-                    return View("DownloadFile");
-                case "Delete File":
-                    return RedirectToAction("SelectedFile");
-                //var list = SelectedFile();
-                //return DeleteFile();
-                case "Selected File":
-                    return RedirectToAction("SelectedFile");
-                //return View("DeleteFile");
-                case "Reset":
-                    return RedirectToAction("Index");
-                case "Sync":
-                    return RedirectToAction("SyncFile");
-                case "Sort Files":
-                    return View("Sort");
+                switch (BtnSubmit)
+                {
+                    case "Upload File":
+                        return View("Upload");
+                    case "Download":
+                        return View("DownloadFile");
+                    case "Delete File":
+                        return View("DeleteFile");
+                    //var list = SelectedFile();
+                    //return DeleteFile();
+                    case "Selected File":
+                        return RedirectToAction("SelectedFile");
+                    //return View("DeleteFile");
+                    case "Reset":
+                        return RedirectToAction("Index");
+                    case "Sync":
+                        return RedirectToAction("SyncFile");
+                    case "Sort Files":
+                        return View("Sort");
                     //return RedirectToAction("SortFile");
+                    case "DeleteFilesSelected":
+                        return RedirectToAction("DeleteSelected");
 
+                }
 
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
-
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public ActionResult UploadFile(FileUploadModel fileUploadModel)
         {
-            var csvreader = new StreamReader(fileUploadModel.fileUpload.InputStream);
+            try
+            {
+                var csvreader = new StreamReader(fileUploadModel.fileUpload.InputStream);
 
-            var name = fileUploadModel.fileUpload.FileName;
-            //name = Path.GetFileName(name);
-            name = Path.Combine(name, "");
-            fileLayer.UploadFileAsync(name);
-            //return View("UploadFile", fileUploadModel);
-            return RedirectToAction("Index");
+                var name = fileUploadModel.fileUpload.FileName;
 
+                name = Path.Combine(name, "");
+                fileLayer.UploadFileAsync(name.ToString());
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public async Task<ActionResult> DownloadFile(string file)
         {
-            if (await fileLayer.DownloadFileAsync(file))
-                return RedirectToAction("Index");
-
-            var file1 = new FileUploadModel();
-            file1.Name = file;
-            return View("UploadFile", file1);
-
-        }
-
-        //public ActionResult DeleteFile(string file)
-        //{
-
-        //    fileLayer.DeleteAsync(file);
-        //    return RedirectToAction("Index");
-        //}
-
-        public ActionResult DeleteFile()
-        {
-            return View("UploadFile", listFileSelected);
-            this.listFileSelected.ForEach(file =>
+            try
             {
-                if (file.isSelected == true)
-                    fileLayer.DeleteAsync(file.Name);
-            });
-            return RedirectToAction("Index");
+                if (await fileLayer.DownloadFileAsync(file))
+                    return RedirectToAction("Index");
 
+                var file1 = new FileUploadModel();
+                file1.Name = file;
+                return View("UploadFile", file1);
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
+
+        public ActionResult DeleteFile(string file)
+        {
+            try
+            {
+                fileLayer.DeleteAsync(file);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        //public ActionResult DeleteFile()
+        //{
+        //    //return View("UploadFile", listFileSelected);
+        //    this.listFileSelected.ForEach(file =>
+        //    {
+        //        if (file.isSelected == true)
+        //            fileLayer.DeleteAsync(file.Name);
+        //    });
+        //    return RedirectToAction("Index");
+
+        //}
 
         public ActionResult SelectedFile(FileListModel listFile)
         {
-            // var listFileSelected = fileLayer.GetFiles();
-            var listFileSelected = new List<FileGet>();
-            listFile.Files.ForEach(file =>
+            try
             {
-                if (file.isSelected == true)
+                //var listFileSelected = fileLayer.GetFiles();
+                //var listFileSelected = new List<FileGet>();
+                listFile.Files.ForEach(file =>
                 {
-                    listFileSelected.Add(file);
-                }
-            });
-            this.listFileSelected = listFileSelected;
-            return View("UploadFile", listFileSelected);
-            //return listFileSelected;
-        }
-
-        public ActionResult SyncFile()
-        {
-            var files = fileLayer.GetFiles();
-            files.ForEach(file =>
-            {
-                fileLayer.DownloadFileAsync(file.Name);
-            });
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult SortFile(string BtnSubmit)
-        {
-            var list = fileLayer.GetFiles();
-            var fileListModel = new FileListModel();
-            //var currentList = new List<FileGet>();
-            switch (BtnSubmit)
-            {
-                case "Name":
-                    var currentList = list.OrderBy(file => file.Name).ToList();
-                    fileListModel.Files = currentList;
-                    return View("Index", fileListModel);
-                case "Size":
-                    currentList = list.OrderBy(file => file.Size).ToList();
-                    fileListModel.Files = currentList;
-                    return View("Index", fileListModel);
+                    if (file.isSelected == true)
+                    {
+                        listFileSelected.Add(file);
+                    }
+                });
+                return View("UploadFile", listFileSelected);
             }
-            return RedirectToAction("Index");
-
-            // var list = fileLayer.GetFiles();
-            // //var currentList = new List<FileGet>();
-            // var fileListModel = new FileListModel();
-
-
-            //var currentList = list.OrderBy(file  => file.Name).ToList();
-            // fileListModel.Files = currentList;
-            // return View("Index", fileListModel);
-
-
+            catch (Exception e)
+            {
+                return null;
+            }
         }
+
+        public async Task<ActionResult> SyncFile()
+        {
+            try
+            {
+                var files = await fileLayer.GetFiles();
+                files.ForEach(file =>
+                {
+                    fileLayer.DownloadFileAsync(file.Name);
+                });
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public async Task<ActionResult> SortFile(string BtnSubmit)
+        {
+            try
+            {
+                var list = await fileLayer.GetFiles();
+
+                switch (BtnSubmit)
+                {
+                    case "Name":
+                        var currentList = list.OrderBy(file => file.Name).ToList();
+                        return View("IndexNew", currentList);
+                    case "Size":
+                        currentList = list.OrderBy(file => file.Size).ToList();
+                        return View("IndexNew", currentList);
+                    case "CreateData":
+                        currentList = list.OrderBy(file => file.CreatedAt).ToList();
+                        return View("IndexNew", currentList);
+                }
+
+                return RedirectToAction("IndexNew");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public async Task<ActionResult> DeleteSelected()
+        {
+            try
+            {
+                var list = await fileLayer.GetFiles();
+                list.ForEach(file =>
+                {
+                    if (file.isSelected == true)
+                        fileLayer.DeleteAsync(file.Name);
+                });
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
     }
 }

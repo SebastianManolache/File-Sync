@@ -11,10 +11,11 @@ namespace Data.Interfaces
 {
     public interface IFileLayer
     {
-        List<FileGet> GetFiles();
+        //List<FileGet> GetFilesAsync();
+        Task<List<FileGet>> GetFiles();
         Task<File> UploadFileAsync(string fileName);
         Task<bool> DownloadFileAsync(string localFileName);
-        File GetByName(string fileName);
+        Task<File> GetByName(string fileName);
         Task<bool> DeleteAsync(string localFileName);
     }
 }

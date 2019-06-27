@@ -128,7 +128,7 @@ namespace ApiProject.Services
             return files;
         }
 
-        public async Task<File> UploadFileAsync(string localFileName)
+        public async Task<File> UploadFileAsync(string sourceFile)
         {
             var BlobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=dotnetsa;AccountKey=nNurpFaIPeFZKxPIInKZo/3yPnSOxZCZOxDwnjTv/6trnkox5VcRzHrcqXK6CQo1/uhWeN7MP9Mrn+unxzNofA==;EndpointSuffix=core.windows.net";
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(BlobStorageConnectionString);
@@ -136,10 +136,10 @@ namespace ApiProject.Services
             CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("filesync");
             //  var cloudBlobContainer = manager.ContainerConnectAzure("filesync");
 
-            string sourceFile = null;
-            string localPath = "C:\\Users\\Admin\\Documents\\Files";
-            sourceFile = Path.Combine(localPath, localFileName);
-
+            //string sourceFile = null;
+            //string localPath = "C:\\Users\\Admin\\Documents\\Files";
+            //sourceFile = Path.Combine(localPath, localFileName);
+            string localFileName = Path.GetFileName(sourceFile);
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(localFileName);
 
             var currentFile = GetByName(localFileName);

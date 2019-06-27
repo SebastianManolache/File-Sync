@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ApiProject.Controllers
 {
     [ApiController, Route("api/[controller]"), Produces("application/json")]
-    public class FileController : Controller
+    public class FileController : ControllerBase
     {
         private readonly IFileService service;
         private readonly IMapper mapper;
@@ -42,8 +42,8 @@ namespace ApiProject.Controllers
             }
         }
 
-        [HttpGet("byname")]
-        public IActionResult GetFileByName([FromBody]string localFileName)
+        [HttpGet("byname/{localFileName}")]
+        public IActionResult GetFileByName(string localFileName)
         {
             try
             {
@@ -64,8 +64,8 @@ namespace ApiProject.Controllers
             }
         }
 
-        [HttpGet("download")]
-        public async Task<IActionResult> DownloadFile([FromBody]string localFileName)
+        [HttpGet("download/{localFileName}")]
+        public async Task<IActionResult> DownloadFile(string localFileName)
         {
             try
             {
@@ -81,8 +81,8 @@ namespace ApiProject.Controllers
         }
 
         ///GET api/<controller>/5
-        [HttpGet("upload")]
-        public async Task<IActionResult> UploadFile([FromBody] string localFileName)
+        [HttpGet("upload/{localFileName}")]
+        public async Task<IActionResult> UploadFile( string localFileName)
         {
             try
             {
@@ -101,8 +101,8 @@ namespace ApiProject.Controllers
             }
         }
 
-        [HttpGet("delete")]
-        public async Task<IActionResult> DeleteFile([FromBody] string localFileName)
+        [HttpDelete("delete/{localFileName}")]
+        public async Task<IActionResult> DeleteFile([FromRoute] string localFileName)
         {
             try
             {

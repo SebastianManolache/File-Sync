@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary1\Data.csproj" />
-    <ProjectReference Include="..\MvcProject\MvcProject.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Http;
+using Microsoft.Ajax.Utilities;
 
 namespace MvcProject.Controllers
 {
@@ -35,27 +36,30 @@ namespace MvcProject.Controllers
             }
         }
 
-        public ActionResult ActionFile(string BtnSubmit)
+        public ActionResult ActionFile(string BtnSubmit, IEnumerable<FileGet> listFile)
         {
             try
             {
+                //var files = new List<FileGet>();
+                //files = listFile.ToList();
                 switch (BtnSubmit)
                 {
                     case "Upload File":
                         return View("Upload");
-                    case "Download":
+                    case "Download File":
                         return View("DownloadFile");
                     case "Delete File":
                         return View("DeleteFile");
-                    case "Reset":
+                    case "Rerfresh":
                         return RedirectToAction("Index");
                     case "Sync":
                         return RedirectToAction("SyncFile");
                     case "Sort Files":
                         return View("Sort");
                     case "DeleteFilesSelected":
-                        return RedirectToAction("DeleteSelected");
-                    case "Filter":
+                        return View("IndexNew", listFile);
+                    //   return RedirectToAction("DeleteSelected",listFile);
+                    case "Filter File":
                         return View("Filter");
 
                 }
@@ -163,17 +167,24 @@ namespace MvcProject.Controllers
             }
         }
 
-        public async Task<ActionResult> DeleteSelected()
+        public ActionResult DeleteSelected(IEnumerable<FileGet> listFile)
         {
             try
             {
-                var list = await fileLayer.GetFiles();
-                list.ForEach(file =>
+                //var list = await fileLayer.GetFiles();
+                var newList = new List<FileGet>();
+                listFile.ForEach(file =>
                 {
                     if (file.isSelected == true)
+                    {
                         fileLayer.DeleteAsync(file.Name);
+                       
+                    }
+                    newList.Add(file);
+
                 });
-                return RedirectToAction("Index");
+
+                return View("IndexNew", newList);
             }
             catch (Exception e)
             {

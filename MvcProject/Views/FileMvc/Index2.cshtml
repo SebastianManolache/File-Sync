@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Data.Models.Dtos.File.FileGet>
+﻿@using Data.Models.Dtos.File
+@model IEnumerable<FileGet>
 
 @{
     ViewBag.Title = "IndexNew";
@@ -9,6 +10,7 @@
     <table class="table">
         <tr>
             <th>
+
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -42,7 +44,7 @@
                     @Html.DisplayFor(modelItem => item.CreatedAt)
                 </td>
                 <td>
-                    @Html.CheckBoxFor(modelItem => item.isSelected,true)
+                    @Html.CheckBoxFor(modelItem => item.isSelected, true)
                 </td>
                 <td>
 
@@ -57,9 +59,9 @@
     <input type="submit" name="BtnSubmit" value="Delete File" onclick="return IsValid();" />
     <input type="submit" name="BtnSubmit" value="Download File" onclick="return IsValid();" />
     <input type="submit" name="BtnSubmit" value="Rerfresh" onclick="return IsValid();" />
-    <input type="submit" name="BtnSubmit" value="Sort Files" onclick="return IsValid();" /> 
-    <input type="submit" name="BtnSubmit" value="DeleteFilesSelected" onclick="return IsValid();" /> 
-    <input type="submit" name="BtnSubmit" value="Filter File" onclick="return IsValid();" /> 
+    <input type="submit" name="BtnSubmit" value="Sort Files" onclick="return IsValid();" />
+    <input type="submit" name="BtnSubmit" value="DeleteFilesSelected" onclick="return IsValid();" />
+    <input type="submit" name="BtnSubmit" value="Filter File" onclick="return IsValid();" />
 
     <br /><br />
     <input type="submit" name="BtnSubmit" value="Sync" onclick="return IsValid();" />

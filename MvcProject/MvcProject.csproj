@@ -388,6 +388,7 @@
     <Content Include="Views\FileMvc\DeleteFile.cshtml" />
     <Content Include="Views\FileMvc\Sort.cshtml" />
     <Content Include="Views\FileMvc\IndexNew.cshtml" />
+    <Content Include="Views\FileMvc\Filter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

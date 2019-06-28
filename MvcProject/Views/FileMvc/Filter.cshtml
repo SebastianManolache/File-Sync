@@ -1,0 +1,26 @@
+﻿@model List<string>
+@{
+    ViewBag.Title = "Filter";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Filter</title>
+</head>
+<body>
+    <div>
+        <form action="/FileMvc/FilterFile" method="post">
+            Sort file by size from:
+            <input type="number" name="number1"> to:
+            <input type="number" name="number2"> 
+            <input type="submit" name="BtnSubmit" value="Size" onclick="return IsValid();" />
+           
+        </form>
+    </div>
+</body>
+</html>
+
+

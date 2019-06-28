@@ -21,7 +21,6 @@ namespace MvcProject.Controllers
             this.fileLayer = fileLayer;
         }
 
-        // GET: File
         public async Task<ActionResult> Index()
         {
             try
@@ -48,20 +47,16 @@ namespace MvcProject.Controllers
                         return View("DownloadFile");
                     case "Delete File":
                         return View("DeleteFile");
-                    //var list = SelectedFile();
-                    //return DeleteFile();
-                    case "Selected File":
-                        return RedirectToAction("SelectedFile");
-                    //return View("DeleteFile");
                     case "Reset":
                         return RedirectToAction("Index");
                     case "Sync":
                         return RedirectToAction("SyncFile");
                     case "Sort Files":
                         return View("Sort");
-                    //return RedirectToAction("SortFile");
                     case "DeleteFilesSelected":
                         return RedirectToAction("DeleteSelected");
+                    case "Filter":
+                        return View("Filter");
 
                 }
 
@@ -101,6 +96,7 @@ namespace MvcProject.Controllers
 
                 var file1 = new FileUploadModel();
                 file1.Name = file;
+
                 return View("UploadFile", file1);
 
             }
@@ -116,39 +112,6 @@ namespace MvcProject.Controllers
             {
                 fileLayer.DeleteAsync(file);
                 return RedirectToAction("Index");
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        //public ActionResult DeleteFile()
-        //{
-        //    //return View("UploadFile", listFileSelected);
-        //    this.listFileSelected.ForEach(file =>
-        //    {
-        //        if (file.isSelected == true)
-        //            fileLayer.DeleteAsync(file.Name);
-        //    });
-        //    return RedirectToAction("Index");
-
-        //}
-
-        public ActionResult SelectedFile(FileListModel listFile)
-        {
-            try
-            {
-                //var listFileSelected = fileLayer.GetFiles();
-                //var listFileSelected = new List<FileGet>();
-                listFile.Files.ForEach(file =>
-                {
-                    if (file.isSelected == true)
-                    {
-                        listFileSelected.Add(file);
-                    }
-                });
-                return View("UploadFile", listFileSelected);
             }
             catch (Exception e)
             {
@@ -217,6 +180,32 @@ namespace MvcProject.Controllers
                 return null;
             }
         }
+        public async Task<ActionResult> FilterFile(List<string> listString)
+        {
+            try
+            {
+                var list = await fileLayer.GetFiles();
+                var currentList = new List<FileGet>();
+                switch (listString[3])
+                {
+                    
+                    case "Size":
+                        list.ForEach(file =>
+                        {
+                            if (file.Size >= int.Parse(listString[0]) && file.Size <= int.Parse(listString[1]))
+                                currentList.Add(file);
+                        });
+                        
+                        return View("IndexNew", currentList);
+                   
+                }
 
+                return RedirectToAction("IndexNew");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
     }
 }
